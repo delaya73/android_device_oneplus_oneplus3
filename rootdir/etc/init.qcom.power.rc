@@ -1,16 +1,16 @@
 on boot
     # Update foreground and background cpusets
-    write /dev/cpuset/foreground/cpus 0-3
-    write /dev/cpuset/foreground/boost/cpus 0-3
-    write /dev/cpuset/background/cpus 0-3
-    write /dev/cpuset/system-background/cpus 0-3
-    write /dev/cpuset/top-app/cpus 0-3
+    write /dev/cpuset/foreground/cpuset.cpus 0-3
+    write /dev/cpuset/foreground/boost/cpuset.cpus 0-3
+    write /dev/cpuset/background/cpuset.cpus 0-3
+    write /dev/cpuset/system-background/cpuset.cpus 0-3
+    write /dev/cpuset/top-app/cpuset.cpus 0-3
 
     # add a cpuset for the camera daemon
     # we want all cores for camera
     mkdir /dev/cpuset/camera-daemon
-    write /dev/cpuset/camera-daemon/cpus 0-3
-    write /dev/cpuset/camera-daemon/mems 0
+    write /dev/cpuset/camera-daemon/cpuset.cpus 0-3
+    write /dev/cpuset/camera-daemon/cpuset.mems 0
     chown system system /dev/cpuset/camera-daemon
     chown system system /dev/cpuset/camera-daemon/tasks
     chmod 0664 /dev/cpuset/camera-daemon/tasks
@@ -128,8 +128,8 @@ on property:init.svc.recovery=running
 on property:dev.bootcomplete=1
     setprop sys.io.scheduler "bfq"
     # update cpusets now that boot is complete and we want better load balancing
-    write /dev/cpuset/top-app/cpus 0-3
-    write /dev/cpuset/foreground/boost/cpus 0-2
-    write /dev/cpuset/foreground/cpus 0-2
-    write /dev/cpuset/background/cpus 0
-    write /dev/cpuset/system-background/cpus 0-2
+    write /dev/cpuset/top-app/cpuset.cpus 0-3
+    write /dev/cpuset/foreground/boost/cpuset.cpus 0-2
+    write /dev/cpuset/foreground/cpuset.cpus 0-2
+    write /dev/cpuset/background/cpuset.cpus 0
+    write /dev/cpuset/system-background/cpuset.cpus 0-2
