@@ -203,7 +203,7 @@ TARGET_USES_MKE2FS := true
 
 # Power
 TARGET_HAS_NO_WIFI_STATS := true
-TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
+#TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
 TARGET_USES_INTERACTION_BOOST := true
 
 # RIL
