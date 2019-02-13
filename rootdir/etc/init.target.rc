@@ -79,6 +79,15 @@ on post-fs-data
 #Create folder for mm-qcamera-daemon
 mkdir /data/vendor/camera 0770 camera camera
 
+    # Create oemnvitems for RIL
+    mkdir /data/oemnvitems 0771 radio radio
+
+    #fingerint, changhua add for fp debug image usage,feature default off
+    mkdir /data/fpc_images 0770 system system
+    mkdir /data/fpc_images/verify 0770 system system
+    mkdir /data/fpc_images/enroll 0770 system system
+    mkdir /data/fpc 0770 system system
+
 on property:init.svc.bootanim=running
     write /sys/class/leds/wled/brightness 4095
 
@@ -210,7 +219,7 @@ service qcamerasvr /system/vendor/bin/mm-qcamera-daemon
     class late_start
     user camera
     group camera system inet input graphics
-    writepid /dev/cpuset/system-background/tasks
+    writepid /dev/cpuset/camera-daemon/tasks /dev/stune/top-app/tasks
 
 #fingerprint service
 service fingerprintd /system/vendor/bin/fingerprintd
@@ -339,15 +348,12 @@ service thermal-engine /system/vendor/bin/thermal-engine -c ${sys.qcom.thermalcf
 #    class core
 #    oneshot
 #
-service time_daemon /system/vendor/bin/time_daemon
-   class late_start
-   user root
-   group root
 
 service adsprpcd /system/vendor/bin/adsprpcd
    class main
    user media
    group media
+   writepid /dev/cpuset/system-background/tasks
 
 service audiod /system/vendor/bin/audiod
    class late_start
@@ -458,6 +464,7 @@ service ims_rtp_daemon /system/vendor/bin/ims_rtp_daemon
    user system
    group radio diag inet log
    disabled
+   writepid /dev/cpuset/system-background/tasks
 
 service vendor.imsrcsservice /system/vendor/bin/imsrcsd
    class main
@@ -548,6 +555,7 @@ service ppd /vendor/bin/mm-pp-dpps
     group system graphics
     socket pps stream 0660 system system
     disabled
+    writepid /dev/cpuset/system-background/tasks
 
 service dashd /sbin/dashd
     class core
@@ -566,28 +574,3 @@ service remosaic_daemon /vendor/bin/remosaic_daemon
     class late_start
     user camera
     writepid /dev/cpuset/system-background/tasks
-
-# such color
-on property:sys.rainbow.recovery=1
-    write /sys/class/leds/red/brightness 255
-    write /sys/class/leds/red/start_idx 0
-    write /sys/class/leds/red/duty_pcts "100,100,100,0,0,50,100"
-    write /sys/class/leds/red/pause_hi 0
-    write /sys/class/leds/red/pause_lo 0
-    write /sys/class/leds/red/ramp_step_ms 100
-    write /sys/class/leds/green/brightness 255
-    write /sys/class/leds/green/start_idx 7
-    write /sys/class/leds/green/duty_pcts "0,50,100,100,0,0,0"
-    write /sys/class/leds/green/pause_hi 0
-    write /sys/class/leds/green/pause_lo 0
-    write /sys/class/leds/green/ramp_step_ms 100
-    write /sys/class/leds/blue/brightness 255
-    write /sys/class/leds/blue/start_idx 14
-    write /sys/class/leds/blue/duty_pcts "0,0,0,0,100,100,100"
-    write /sys/class/leds/blue/pause_hi 0
-    write /sys/class/leds/blue/pause_lo 0
-    write /sys/class/leds/blue/ramp_step_ms 100
-    write /sys/class/leds/rgb/rgb_blink 1
-
-on property:sys.rainbow.recovery=0
-    write /sys/class/leds/rgb/rgb_blink 0
